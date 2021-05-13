@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <!-- <div  @click = "handle" v-bind:title = "title">{{msg}}</div> -->
+        <div>
+            姓：<input  v-model = "firstname"></input>
+            名：<input  v-model = "lastname"></input>
+            <button @click="add">提交</button>
+            <div>{{fullname}}</div>
+            <div>{{counter}}</div>
+            <ul>
+                <!-- <li v-for="(item,index) of list" key="index">{{item}}</li> -->
+                <todo-item 
+                v-for="(item,index) of list" 
+                :key="index" 
+                :content="item"
+                :index = "index"
+                @delete="handleDelete"
+                ></todo-item>
+            </ul>
+        </div>
+    </div>
+       
+    <script>
+        Vue.component("todo-item",{
+            props:["content","index"],
+            template:"<li @click='selectrow'>{{content}}</li>",
+            methods:{
+                selectrow:function(){
+                    this.$emit("delete",this.index);
+                }
+            }
+        }),
+            // var Todoitem = {
+            //     template:"<li>item</li>"
+            // }
+        new Vue({
+            el:"#root",
+            // components:{
+            //     "todo-item":Todoitem
+            // },
+            data:{
+                msg:"hello,world",
+                title:"heeloooooooo",
+                firstname:"",
+                lastname:"",
+                counter:0,
+                list:[]
+            },
+            computed:{
+                fullname:function(){
+                    return this.firstname + " " + this.lastname;
+                }
+            },
+            watch:{
+                // firstname:function(){
+                //     this.counter++;
+                // },
+                // lastname:function(){
+                //     this.counter++;
+                // }
+                fullname:function(){
+                    this.counter++;
+                }
+            },
+            methods:{
+                handle:function(){
+                    alert(123)
+                    console.log("hello")
+                },
+                add:function(index){
+                    this.list.push(this.fullname)
+                    this.firstname = ""
+                    this.lastname = ""
+                },
+                handleDelete:function(index){
+                    this.list.splice(index,1);
+                }
+            }
+        })
+    </script>
+</body>
+</html>
